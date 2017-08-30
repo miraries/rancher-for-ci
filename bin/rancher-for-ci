@@ -24,7 +24,7 @@ const args = {
     description: 'version to which you want to upgrade your service',
     usage: '1.0.0 (defaults to "latest")',
     value: {
-      vars: [ 'PLUGIN_VERSION' ],
+      vars: [ 'VERSION', 'PLUGIN_VERSION' ],
       default: 'latest'
     }
   },
@@ -57,11 +57,12 @@ const args = {
   },
   get (name) {
     const { description, required, usage, value } = this[name]
-    const resolvedValue = value.vars.map(v => process.env[v])
-                                    .filter(v => !!v)
-                                    .shift()
+    const resolvedValue =
+      value.vars.map(v => process.env[v] || process.env[v.toUpperCase()])
+                .filter(v => !!v)
+                .shift() || value.default
 
-    if (!resolvedValue && !value.default && required) {
+    if (!resolvedValue && required) {
       console.error(`argument "${name}" is missing`)
       console.error(`    description: ${description}`)
       console.error(`    usage: ${usage}`)
@@ -88,7 +89,7 @@ const client = new Rancher(
   try {
     await client.upgrade(service, version)
   } catch (err) {
-    console.error(err)
+    console.error('Something went wront:', err.message)
     process.exit(1)
   }
 
