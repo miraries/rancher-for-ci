@@ -56,17 +56,16 @@ const args = {
     }
   },
   get (name) {
-    const arg = this[name]
-    const { value, value: { vars } } = arg
-    const resolvedValue = vars.map(v => process.env[v])
-                              .filter(v => !!v)
-                              .shift()
+    const { description, required, usage, value } = this[name]
+    const resolvedValue = values.vars.map(v => process.env[v])
+                                     .filter(v => !!v)
+                                     .shift()
 
-    if (!resolvedValue && !value.default && arg.required) {
+    if (!resolvedValue && !value.default && required) {
       console.error(`argument "${name}" is missing`)
-      console.error(`    description: ${arg.description}`)
-      console.error(`    usage: ${arg.usage}`)
-      console.error(`    env vars: ${arg.value.vars.join(', ')}`)
+      console.error(`    description: ${description}`)
+      console.error(`    usage: ${usage}`)
+      console.error(`    env vars: ${value.vars.join(', ')}`)
       process.exit(1)
     }
 
@@ -90,6 +89,6 @@ const client = new Rancher(
     process.exit(1)
   }
 
-  console.log(`Upgrade has been successfully requested`)
+  console.log(`Upgrade request has been accepted`)
   process.exit(0)
 })()
