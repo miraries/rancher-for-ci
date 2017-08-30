@@ -87,4 +87,6 @@ const client = new Rancher(
     console.error(err)
     process.exit(1)
   }
+
+  console.log(`Upgrade has been successfully requested for service ${arg.get('service')}`)
 })()
