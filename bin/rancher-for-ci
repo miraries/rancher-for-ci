@@ -113,7 +113,7 @@ const client = new Rancher(
     }
   } catch (err) {
     console.error('Something went wrong')
-    console.error('    error:', errr.message)
+    console.error('    error:', err.message)
     console.error('    availabel env vars:', require('util').inspect(process.env, false, null))
     process.exit(1)
   }
