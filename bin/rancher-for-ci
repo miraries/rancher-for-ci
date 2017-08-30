@@ -27,12 +27,11 @@ const args = {
   },
   version: {
     name: 'version',
-    required: false,
+    required: true,
     description: 'version to which you want to upgrade your service',
     usage: '1.0.0 (defaults to "latest")',
     value: {
-      vars: [ 'VERSION', 'PLUGIN_VERSION' ],
-      default: 'latest'
+      vars: [ 'VERSION', 'PLUGIN_VERSION', 'DRONE_TAG', 'CI_TAG' ]
     }
   },
   versionPrefix: {

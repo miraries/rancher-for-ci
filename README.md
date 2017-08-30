@@ -64,8 +64,32 @@ pipeline:
         secret_key: MySecretKey
         service: my-stack/my-service
         version: 2.0.1-rc.1
-
 ```
+
+### Overriding verson on drone deploy command
+
+You can override the "verion" property buy passing a "VERSION" parameter to `deploy` command.
+`drone deploy owner/repo {BUILD} {ENVIRONMENT} -p VERSION=2.0.0`.
+
+
+### Using DRONE_TAG/CI_TAG as version
+
+If you omit "version" propperty and do not pass the override version parameter, the plugin will try to use "DRONE_TAG" and "CI_TAG" as version.
+
+```diff
+ pipeline:
+     deploy:
+         image: rwillians/rancher-for-ci
+         service: my-stack/my-service
+-        version: v1.0.10
+         version_prefix: v
+         secrets: [ rancher_url, rancher_access_key, rancher_secret_key ]
+```
+
+`drone deploy owner/repo {BUILD} {ENVIRONMENT}`
+
+Note that you should use a build resultant of a `tag` event, otherwise there won't be any "DRONE_TAG" or "CI_TAG" which will result in failure.
+
 
 ### Development
 
