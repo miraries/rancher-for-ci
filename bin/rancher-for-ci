@@ -58,7 +58,7 @@ const args = {
   get (name) {
     const { description, required, usage, value } = this[name]
     const resolvedValue =
-      value.vars.map(v => process.env[v] || process.env[v.toUpperCase()])
+      value.vars.map(v => process.env[v] || process.env[v.toLowerCase()])
                 .filter(v => !!v)
                 .shift() || value.default
 
