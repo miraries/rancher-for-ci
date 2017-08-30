@@ -15,4 +15,4 @@ RUN cd /tmp \
 COPY . /usr/src/app
 RUN mv -f /tmp/node_modules /usr/src/app
 
-ENTRYPOINT [ "bin/rancher-for-ci" ]
+ENTRYPOINT [ "/usr/src/app/bin/rancher-for-ci" ]
