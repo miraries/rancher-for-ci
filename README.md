@@ -7,16 +7,16 @@ Because I needed a plugin that could upgrade only a given service's docker image
 
 ## Parameters
 
-- *endpoint*: the environment API endpoint
-- *access key*: a valid environment API access key
-- *secret key*: a valid environment API secret key
-- *service*: the services which you want to upgrade
-- *version*: the version to which you want to upgrade
+- **endpoint**: the environment API endpoint
+- **access key**: a valid environment API access key
+- **secret key**: a valid environment API secret key
+- **service**: the services which you want to upgrade
+- **version**: the version to which you want to upgrade
 
 
 ## Using as a node module
 
-Install it (`yarn add rancher-for-ci` or `npm i -s rancher-for-ci`) then as in the example below:
+Install it (`yarn add rancher-for-ci` or `npm i -s rancher-for-ci`) then use as in the example below:
 
 ```js
 const Rancher = require('rancher-for-ci')
@@ -50,7 +50,7 @@ pipeline:
         image: rwillians/rancher-for-ci
         endpoint: https://rancher.domain.com/v1/projects/{ID}
         access_key: MyAccessKey
-        secret_key:MySecretKey
+        secret_key: MySecretKey
         service: my-stack/my-service
         version: 2.0.1-rc.1
 
