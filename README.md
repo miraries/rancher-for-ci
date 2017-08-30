@@ -68,9 +68,9 @@ docker build -t rancher-for-ci .
 
 ```sh
 docker run -ti \
-    -e PLUGIN_ENDPOINT="http://rancher.domain.com/v1/projects/{ID}" \
-    -e PLUGIN_ACCESS_KEY="REPLACE_ME" \
-    -e PLUGIN_SECRET_KEY="REPLACE_ME" \
+    -e PLUGIN_ENDPOINT="https://rancher.domain.com/v1/projects/{ID}" \
+    -e PLUGIN_ACCESS_KEY="ReplaceMe!" \
+    -e PLUGIN_SECRET_KEY="ReplaceMe!" \
     -e PLUGIN_SERVICE="my-stack/my-service" \
     -e PLUGIN_VERSION="1.0.0" \
     rancher-for-ci

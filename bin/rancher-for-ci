@@ -57,9 +57,9 @@ const args = {
   },
   get (name) {
     const { description, required, usage, value } = this[name]
-    const resolvedValue = values.vars.map(v => process.env[v])
-                                     .filter(v => !!v)
-                                     .shift()
+    const resolvedValue = value.vars.map(v => process.env[v])
+                                    .filter(v => !!v)
+                                    .shift()
 
     if (!resolvedValue && !value.default && required) {
       console.error(`argument "${name}" is missing`)
