@@ -80,10 +80,13 @@ const client = new Rancher(
 )
 
 ;(async () => {
-  console.log(`Upgrading service "${args.get('service')}"...`)
+  const service = args.get('service')
+  const version = args.get('version')
+
+  console.log(`Upgrading service "${service}" to version "${version}"...`)
 
   try {
-    await client.upgrade(args.get('service'), args.get('version'))
+    await client.upgrade(service, version)
   } catch (err) {
     console.error(err)
     process.exit(1)
