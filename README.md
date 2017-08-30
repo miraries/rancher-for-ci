@@ -44,6 +44,17 @@ pipeline:
         secrets: [ rancher_url, rancher_access_key, rancher_secret_key ]
 ```
 
+```diff
+ pipeline:
+     deploy:
+         image: rwillians/rancher-for-ci
+         service: my-stack/my-service
+-        version: latest
++        version: v1.0.10
++        version_prefix: v
+         secrets: [ rancher_url, rancher_access_key, rancher_secret_key ]
+```
+
 ```yml
 pipeline:
     deploy:

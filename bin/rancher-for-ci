@@ -8,6 +8,13 @@ process.on('unhandledRejection', (reason, promise) => {
   process.exit(1)
 })
 
+const flags = {
+  values: process.argv.slice(2),
+  has (flag) {
+    return this.values.includes(flag)
+  }
+}
+
 const args = {
   service: {
     name: 'service',
@@ -26,6 +33,15 @@ const args = {
     value: {
       vars: [ 'VERSION', 'PLUGIN_VERSION' ],
       default: 'latest'
+    }
+  },
+  versionPrefix: {
+    name: 'version_prefix',
+    required: false,
+    description: 'remove version prefix (e.g.: if set to "v", then "v1.0.0" will become "1.0.0")',
+    usage: 'v',
+    value: {
+      vars: [ 'PLUGIN_VERSION_PREFIX' ]
     }
   },
   rancherUrl: {
@@ -56,7 +72,7 @@ const args = {
     }
   },
   get (name) {
-    const { description, required, usage, value } = this[name]
+    const { description, required, transform, usage, value } = this[name]
     const resolvedValue =
       value.vars.map(v => process.env[v] || process.env[v.toLowerCase()])
                 .filter(v => !!v)
@@ -82,12 +98,18 @@ const client = new Rancher(
 
 ;(async () => {
   const service = args.get('service')
-  const version = args.get('version')
+  const versionPrefix = args.get('versionPrefix')
+  const version = versionPrefix
+    ? args.get('version').replace(new RegExp(`^${versionPrefix}`), '')
+    : args.get('version')
 
-  console.log(`Upgrading service "${service}" to version "${version}"...`)
+
+  console.log('Upgrading service', service, 'to version', (versionPrefix ? `[${versionPrefix}]` : '') + version, '...')
 
   try {
-    await client.upgrade(service, version)
+    if (!flags.has('--dry-run')) {
+      await client.upgrade(service, version)
+    }
   } catch (err) {
     console.error('Something went wront:', err.message)
     process.exit(1)
