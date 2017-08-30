@@ -81,6 +81,8 @@ const client = new Rancher(
 )
 
 ;(async () => {
+  console.log(`Upgrading service "${arg.get('service')}"...`)
+
   try {
     await client.upgrade(args.get('service'), args.get('version'))
   } catch (err) {
@@ -88,5 +90,6 @@ const client = new Rancher(
     process.exit(1)
   }
 
-  console.log(`Upgrade has been successfully requested for service ${arg.get('service')}`)
+  console.log(`Upgrade has been successfully requested`)
+  process.exit(0)
 })()
