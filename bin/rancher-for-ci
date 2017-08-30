@@ -29,7 +29,7 @@ const args = {
     name: 'version',
     required: true,
     description: 'version to which you want to upgrade your service',
-    usage: '1.0.0 (defaults to "latest")',
+    usage: '1.0.0',
     value: {
       vars: [ 'VERSION', 'PLUGIN_VERSION', 'DRONE_TAG', 'CI_TAG' ]
     }
@@ -37,7 +37,7 @@ const args = {
   versionPrefix: {
     name: 'version_prefix',
     required: false,
-    description: 'remove version prefix (e.g.: if set to "v", then "v1.0.0" will become "1.0.0")',
+    description: 'remove version prefix (e.g.: if set to "v", then a version "v1.0.0" will become "1.0.0")',
     usage: 'v',
     value: {
       vars: [ 'PLUGIN_VERSION_PREFIX' ]
@@ -82,6 +82,7 @@ const args = {
       console.error(`    description: ${description}`)
       console.error(`    usage: ${usage}`)
       console.error(`    env vars: ${value.vars.join(', ')}`)
+      console.error('    availabel env vars:', require('util').inspect(process.env, false, null))
       process.exit(1)
     }
 
@@ -110,7 +111,9 @@ const client = new Rancher(
       await client.upgrade(service, version)
     }
   } catch (err) {
-    console.error('Something went wront:', err.message)
+    console.error('Something went wrong')
+    console.error('    error:', errr.message)
+    console.error('    availabel env vars:', require('util').inspect(process.env, false, null))
     process.exit(1)
   }
 
