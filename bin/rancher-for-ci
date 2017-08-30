@@ -31,7 +31,8 @@ const args = {
     description: 'version to which you want to upgrade your service',
     usage: '1.0.0',
     value: {
-      vars: [ 'VERSION', 'PLUGIN_VERSION', 'DRONE_TAG', 'CI_TAG' ]
+      vars: [ 'VERSION', 'PLUGIN_VERSION', 'DRONE_TAG', 'CI_TAG', 'DRONE_COMMIT_REF' ],
+      transform: (str) => str.replace(/^refs\/tags\//, '')
     }
   },
   versionPrefix: {
@@ -71,7 +72,7 @@ const args = {
     }
   },
   get (name) {
-    const { description, required, transform, usage, value } = this[name]
+    const { description, required, usage, value } = this[name]
     const resolvedValue =
       value.vars.map(v => process.env[v] || process.env[v.toLowerCase()])
                 .filter(v => !!v)
@@ -86,7 +87,7 @@ const args = {
       process.exit(1)
     }
 
-    return resolvedValue
+    return value.transform ? value.transform(resolvedValue) : resolvedValue
   }
 }
 
