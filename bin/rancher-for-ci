@@ -1,0 +1,90 @@
+#!/usr/bin/env node
+'use strict'
+
+const Rancher = require('../index')
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.log({ event: 'UnhandledPromiseRejection', promise, reason })
+  process.exit(1)
+})
+
+const args = {
+  service: {
+    name: 'service',
+    required: true,
+    description: 'service name to be upgraded',
+    usage: '[stack-name/]service-name',
+    value: {
+      vars: [ 'PLUGIN_SERVICE' ]
+    }
+  },
+  version: {
+    name: 'version',
+    required: false,
+    description: 'version to which you want to upgrade your service',
+    usage: '1.0.0 (defaults to "latest")',
+    value: {
+      vars: [ 'PLUGIN_VERSION' ],
+      default: 'latest'
+    }
+  },
+  rancherUrl: {
+    name: 'endpoint',
+    required: true,
+    description: 'rancher api url for the environment you wish to upgrade',
+    usage: 'https://rancher.domain.com/v1/projects/{ID}',
+    value: {
+      vars: [ 'PLUGIN_ENDPOINT', 'RANCHER_URL' ]
+    }
+  },
+  rancherAccessKey: {
+    name: 'access_key',
+    required: true,
+    description: 'access key for the given rancher api environment',
+    usage: 'FF4D832E2045B894577C',
+    value: {
+      vars: [ 'PLUGIN_ACCESS_KEY', 'RANCHER_ACCESS_KEY' ]
+    }
+  },
+  rancherSecretKey: {
+    name: 'secret_key',
+    required: true,
+    description: 'secret key for the given rancher api environment',
+    usage: 'XhwN2HCvYppbQQqgXNurmZLrrjGHhg81s2yETMCi',
+    value: {
+      vars: [ 'PLUGIN_SECRET_KEY', 'RANCHER_SECRET_KEY' ]
+    }
+  },
+  get (name) {
+    const arg = this[name]
+    const { value, value: { vars } } = arg
+    const resolvedValue = vars.map(v => process.env[v])
+                              .filter(v => !!v)
+                              .shift()
+
+    if (!resolvedValue && !value.default && arg.required) {
+      console.error(`argument "${name}" is missing`)
+      console.error(`    description: ${arg.description}`)
+      console.error(`    usage: ${arg.usage}`)
+      console.error(`    env vars: ${arg.value.vars.join(', ')}`)
+      process.exit(1)
+    }
+
+    return resolvedValue
+  }
+}
+
+const client = new Rancher(
+  args.get('rancherUrl'),
+  args.get('rancherAccessKey'),
+  args.get('rancherSecretKey')
+)
+
+;(async () => {
+  try {
+    await client.upgrade(args.get('service'), args.get('version'))
+  } catch (err) {
+    console.error(err)
+    process.exit(1)
+  }
+})()
