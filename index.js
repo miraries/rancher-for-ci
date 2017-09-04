@@ -48,14 +48,13 @@ const findServiceByName = async (client, name) => {
 }
 
 const buildUpgradeInstructions = async (service, newVersion) => {
-  const { upgrade: { inServiceStrategy } } = service
-  const { launchConfig: { imageUuid } } = inServiceStrategy
+  const { launchConfig, launchConfig: { imageUuid } } = service
 
   const [ type, repo, ] = imageUuid.split(':')
   const image = [ type, repo, newVersion ].join(':')
 
   return merge(
-    { inServiceStrategy },
+    { inServiceStrategy: { launchConfig } },
     { inServiceStrategy: { launchConfig: { imageUuid: image } } }
   )
 }
