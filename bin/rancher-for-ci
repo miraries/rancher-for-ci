@@ -2,7 +2,7 @@
 'use strict'
 
 const Rancher = require('../index')
-const package = require('../package')
+const pkg = require('../package')
 
 process.on('unhandledRejection', (reason, promise) => {
   console.log({ event: 'UnhandledPromiseRejection', promise, reason })
@@ -100,7 +100,7 @@ const client = new Rancher(
 )
 
 ;(async () => {
-  console.log(`Running rancher-for-ci v${package.version}`)
+  console.log(`Running rancher-for-ci v${pkg.version}`)
 
   const service = args.get('service')
   const versionPrefix = args.get('versionPrefix')
@@ -118,6 +118,7 @@ const client = new Rancher(
   } catch (err) {
     console.error('Something went wrong')
     console.error('    error:', err.message)
+    console.error('    error:', err.stack)
     process.exit(1)
   }
 
