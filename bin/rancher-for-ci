@@ -72,8 +72,8 @@ const args = {
       vars: [ 'PLUGIN_SECRET_KEY', 'RANCHER_SECRET_KEY' ]
     }
   },
-  get (name) {
-    const { description, required, usage, value } = this[name]
+  get (parameter) {
+    const { description, name, required, usage, value } = this[parameter]
     const resolvedValue =
       value.vars.map(v => process.env[v] || process.env[v.toLowerCase()])
                 .filter(v => !!v)
