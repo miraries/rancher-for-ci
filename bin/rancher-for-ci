@@ -111,7 +111,7 @@ const client = new Rancher(
     }
   } catch (err) {
     console.error('Something went wrong')
-    console.error('    error:', errr.message)
+    console.error('    error:', err.message)
     process.exit(1)
   }
 
