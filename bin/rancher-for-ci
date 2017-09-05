@@ -108,7 +108,6 @@ const client = new Rancher(
     ? args.get('version').replace(new RegExp(`^${versionPrefix}`), '')
     : args.get('version')
 
-
   console.log('Upgrading service', service, 'to version', (versionPrefix ? `[${versionPrefix}]` : '') + version, '...')
 
   try {
