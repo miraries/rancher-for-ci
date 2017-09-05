@@ -12,7 +12,7 @@ process.on('unhandledRejection', (reason, promise) => {
 const prettyprint = (obj) => {
   JSON.stringify(obj, null, 2)
       .split('\n')
-      .forEach(line => { console.log('#   ' + line) })
+      .forEach(line => { console.log('    ' + line) })
 }
 
 const flags = {
@@ -59,6 +59,14 @@ const args = {
     value: {
       vars: [ 'PLUGIN_RELEASE_VARIABLE' ],
       transform: (str) => str.toUpperCase()
+    }
+  },
+  release: {
+    name: 'release',
+    required: false,
+    description: 'gets the commit SHA which usually is used as release',
+    value: {
+      vars: [ 'DRONE_COMMIT_SHA', 'CI_COMMIT_SHA' ]
     }
   },
   logInstructions: {
@@ -109,8 +117,8 @@ const args = {
     if (!resolvedValue && required) {
       console.error(`argument "${name}" is missing`)
       console.error(`    description: ${description}`)
-      console.error(`    usage: ${usage}`)
-      console.error(`    env vars: ${value.vars.join(', ')}`)
+      console.error(`          usage: ${usage}`)
+      console.error(`       env vars: ${value.vars.join(', ')}`)
       process.exit(1)
     }
 
@@ -136,6 +144,7 @@ const client = new Rancher({
 ;(async () => {
   console.log(`Running rancher-for-ci v${pkg.version}`)
 
+  const release = args.get('release')
   const service = args.get('service')
   const versionPrefix = args.get('versionPrefix')
   const version = versionPrefix
@@ -145,23 +154,37 @@ const client = new Rancher({
   console.log('Upgrading service', service, 'to version', (versionPrefix ? `[${versionPrefix}]` : '') + version, '...')
 
   try {
-    const { upgrade, response } = await client.upgrade(service, version)
+    const result = await client.upgrade(service, version, release)
+    const { service: { launchConfig: { imageUuid } } } = result
 
-    console.log(`Upgrade request has been accepted`)
 
-    if (!args.get('logInstructions')) {
-      process.exit(0)
+    console.log('\n##########################################################\n')
+    console.log(` Upgrade request has been accepted!`)
+    console.log('        service:', service)
+    console.log('     from image:', result.service.launchConfig.imageUuid)
+    console.log('       to image:', result.upgrade.inServiceStrategy.launchConfig.imageUuid)
+    console.log('        release:', release)
+    console.log('\n##########################################################\n')
+
+    if (args.get('logInstructions')) {
+      console.error('\nService:')
+      prettyprint(result.service)
+      console.error('\n\nUpgrade instructions:')
+      prettyprint(result.upgrade)
+      console.error('\n\nRancher response:')
+      prettyprint(result.response)
+      console.log('\n##########################################################\n')
     }
-
-    console.error('Upgrade instructions:')
-    prettyprint(upgrade)
-    console.error('Response:')
-    prettyprint(response)
   } catch (err) {
-    console.error('Something went wrong')
-    console.error('    error:', err.message)
-    console.error('    stack:', err.stack)
-    console.error('    rancher response:', err.response)
+    console.log('\n##########################################################\n')
+    console.error('Ops, something went wrong!')
+    console.error('               error:', err.message)
+    console.error('               stack:', err.stack)
+    console.error('.   rancher response:', err.response)
+    console.log('\n##########################################################\n')
     process.exit(1)
   }
+
+  console.log('Done!')
+  process.exit(0)
 })()

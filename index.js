@@ -82,8 +82,6 @@ class Rancher {
       secretKey: process.env.RANCHER_SECRET_KEY
     }, options)
 
-    console.log(this.config)
-
     this.client = axios.create({
       auth: {
         username: this.config.accessKey,
@@ -94,20 +92,20 @@ class Rancher {
     })
   }
 
-  async upgrade (name, version) {
+  async upgrade (name, version, release) {
     const { dryRun, releaseVariable } = this.config
     const service = await findServiceByName(this.client, name)
     let upgrade = await buildUpgradeInstructions(service, version)
 
-    if (releaseVariable) {
-      upgrade = await withReleaseEnvVar(upgrade, releaseVariable, version)
+    if (releaseVariable && release) {
+      upgrade = await withReleaseEnvVar(upgrade, releaseVariable, release)
     }
 
     const response = (!dryRun)
       ? await upgradeService(this.client, service.id, upgrade)
       : {}
 
-    return { upgrade, response }
+    return { service, upgrade, response }
   }
 }
 
