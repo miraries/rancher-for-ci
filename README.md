@@ -91,6 +91,56 @@ If you omit "version" propperty and do not pass the override version parameter, 
 Note that you should use a build resultant of a `tag` event, otherwise there won't be any "DRONE_TAG" or "CI_TAG" which will result in failure.
 
 
+### All properties
+
+#### service (required)
+
+The service name which will be upgraded, e.g.: **service-name** or **stack-name/service-name**.
+
+
+#### version (optional)
+
+Version to which you want to upgrade your service, e.g: **v1.0.1**.
+
+This value can also be acquired from the environment variables **VERSION**, **PLUGIN_VERSION**, **DRONE_TAG**, **CI_TAG** and **DRONE_COMMIT_REF**.
+
+
+#### version_prefix (optional)
+
+Remove the version prefix, e.g.: if set to "v", then a version "v1.0.0" will become "1.0.0".
+
+
+#### release_variable (required)
+
+Adds an environment variable to Rancher containing the release version, eg: **SENTRY_RELEASE**.
+
+
+#### log_instructions (optional)
+
+Allow to log instructions sent to rancher (`true` or `false`), which might expose sensitive information.
+
+
+#### endpoint (optional)
+
+Rancher api url for the environment you want to upgrade, e.g.: **https://rancher.domain.com/v1/**.
+
+This value can also be acquired from the environment variable **RANCHER_URL**.
+
+
+#### access_key (optional)
+
+Access key for the given Rancher api environment, e.g.: **FF4D832E2045B894577C**.
+
+This value can also be acquired from the environment variable **RANCHER_ACCESS_KEY**.
+
+
+#### secret_key (optional)
+
+Secret key for the given Rancher api environment, e.g.: **XhwN2HCvYppbQQqgXNurmZLrrjGHhg81s2yETMCi**.
+
+This value can also be acquired from the environment variable **RANCHER_SECRET_KEY**.
+
+
 ### Development
 
 #### Build
@@ -107,6 +157,9 @@ docker run -ti \
     -e PLUGIN_ACCESS_KEY=ReplaceMe! \
     -e PLUGIN_SECRET_KEY=ReplaceMe! \
     -e PLUGIN_SERVICE=my-stack/my-service \
-    -e PLUGIN_VERSION=1.0.0 \
-    rancher-for-ci
+    -e PLUGIN_VERSION=v1.0.0 \
+    -e PLUGIN_VERSION_PREFIX=v \
+    -e PLUGIN_RELEASE_VARIABLE=SENTRY_RELEASE \
+    -e PLUGIN_LOG_INSTRUCTIONS=1 \
+    rancher-for-ci --dry-run
 ```

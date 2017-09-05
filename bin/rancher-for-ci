@@ -9,6 +9,12 @@ process.on('unhandledRejection', (reason, promise) => {
   process.exit(1)
 })
 
+const prettyprint = (obj) => {
+  JSON.stringify(obj, null, 2)
+      .split('\n')
+      .forEach(line => { console.log('#   ' + line) })
+}
+
 const flags = {
   values: process.argv.slice(2),
   has (flag) {
@@ -43,6 +49,27 @@ const args = {
     usage: 'v',
     value: {
       vars: [ 'PLUGIN_VERSION_PREFIX' ]
+    }
+  },
+  releaseVariable: {
+    name: 'release_variable',
+    required: false,
+    description: 'adds an environment variable to Rancher containing the release version',
+    usage: 'SENTRY_RELEASE',
+    value: {
+      vars: [ 'PLUGIN_RELEASE_VARIABLE' ],
+      transform: (str) => str.toUpperCase()
+    }
+  },
+  logInstructions: {
+    name: 'log_instructions',
+    required: false,
+    description: 'log upgrade instructions sent to rancher, which might expose sensitive information',
+    usage: 'true|false',
+    value: {
+      default: false,
+      vars: [ 'PLUGIN_LOG_INSTRUCTIONS' ],
+      transform: (str) => (str === 1 || str === '1' || str === 'true')
     }
   },
   rancherUrl: {
@@ -87,17 +114,24 @@ const args = {
       process.exit(1)
     }
 
-    return (resolvedValue && value.transform)
+    if (!resolvedValue) {
+      return value.default || null
+    }
+
+    return value.transform
       ? value.transform(resolvedValue)
       : resolvedValue
   }
 }
 
-const client = new Rancher(
-  args.get('rancherUrl'),
-  args.get('rancherAccessKey'),
-  args.get('rancherSecretKey')
-)
+const client = new Rancher({
+  url: args.get('rancherUrl'),
+  dryRun: flags.has('--dry-run'),
+  accessKey: args.get('rancherAccessKey'),
+  secretKey: args.get('rancherSecretKey'),
+  releaseVariable: args.get('releaseVariable'),
+  logInstructions: args.get('logInstructions')
+})
 
 ;(async () => {
   console.log(`Running rancher-for-ci v${pkg.version}`)
@@ -111,9 +145,18 @@ const client = new Rancher(
   console.log('Upgrading service', service, 'to version', (versionPrefix ? `[${versionPrefix}]` : '') + version, '...')
 
   try {
-    if (!flags.has('--dry-run')) {
-      await client.upgrade(service, version)
+    const { upgrade, response } = await client.upgrade(service, version)
+
+    console.log(`Upgrade request has been accepted`)
+
+    if (!args.get('logInstructions')) {
+      process.exit(0)
     }
+
+    console.error('Upgrade instructions:')
+    prettyprint(upgrade)
+    console.error('Response:')
+    prettyprint(response)
   } catch (err) {
     console.error('Something went wrong')
     console.error('    error:', err.message)
@@ -121,7 +164,4 @@ const client = new Rancher(
     console.error('    rancher response:', err.response)
     process.exit(1)
   }
-
-  console.log(`Upgrade request has been accepted`)
-  process.exit(0)
 })()

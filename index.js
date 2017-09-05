@@ -59,24 +59,55 @@ const buildUpgradeInstructions = async (service, newVersion) => {
   )
 }
 
+const withReleaseEnvVar = async (instruction, variable, release) => {
+  const launchConfig = { environment: { [variable]: release } }
+
+  return merge(
+    instruction,
+    { inServiceStrategy: { launchConfig } }
+  )
+}
+
 const upgradeService = async (client, id, upgrade) => {
   return (await client.post(`services/${id}/?action=upgrade`, upgrade)).data
 }
 
 class Rancher {
-  constructor (envUrl, envAccessKey, envSecretKey) {
+  constructor (options) {
+    this.config = Object.assign({
+      dryRun: false,
+      releaseVariable: null,
+      url: process.env.RANCHER_URL,
+      accessKey: process.env.RANCHER_ACCESS_KEY,
+      secretKey: process.env.RANCHER_SECRET_KEY
+    }, options)
+
+    console.log(this.config)
+
     this.client = axios.create({
-      auth: { username: envAccessKey, password: envSecretKey },
-      baseURL: envUrl,
+      auth: {
+        username: this.config.accessKey,
+        password: this.config.secretKey
+      },
+      baseURL: this.config.url,
       headers: { 'Accept': 'application/json' }
     })
   }
 
   async upgrade (name, version) {
+    const { dryRun, releaseVariable } = this.config
     const service = await findServiceByName(this.client, name)
-    const upgrade = await buildUpgradeInstructions(service, version)
+    let upgrade = await buildUpgradeInstructions(service, version)
 
-    return upgradeService(this.client, service.id, upgrade)
+    if (releaseVariable) {
+      upgrade = await withReleaseEnvVar(upgrade, releaseVariable, version)
+    }
+
+    const response = (!dryRun)
+      ? await upgradeService(this.client, service.id, upgrade)
+      : {}
+
+    return { upgrade, response }
   }
 }
 
