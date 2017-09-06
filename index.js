@@ -55,7 +55,7 @@ const buildUpgradeInstructions = async (service, newVersion) => {
 
   return merge(
     { inServiceStrategy: { launchConfig } },
-    { inServiceStrategy: { launchConfig: { imageUuid: image } } }
+    { inServiceStrategy: { launchConfig: { imageUuid: image }, startFirst: true } }
   )
 }
 
