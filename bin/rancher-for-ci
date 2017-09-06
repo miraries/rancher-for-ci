@@ -155,16 +155,15 @@ const client = new Rancher({
 
   try {
     const result = await client.upgrade(service, version, release)
-    const { service: { launchConfig: { imageUuid } } } = result
+    const { upgrade: { inServiceStrategy: { launchConfig } } } = result
 
 
-    console.log('\n##########################################################\n')
+    console.log('\n########################################################\n')
     console.log(` Upgrade request has been accepted!`)
-    console.log('        service:', service)
-    console.log('     from image:', result.service.launchConfig.imageUuid)
-    console.log('       to image:', result.upgrade.inServiceStrategy.launchConfig.imageUuid)
-    console.log('        release:', release)
-    console.log('\n##########################################################\n')
+    console.log('      service:', service)
+    console.log('     to image:', launchConfig.imageUuid)
+    console.log('      release:', release)
+    console.log('\n########################################################\n')
 
     if (args.get('logInstructions')) {
       console.error('\nService:')
@@ -173,15 +172,15 @@ const client = new Rancher({
       prettyprint(result.upgrade)
       console.error('\n\nRancher response:')
       prettyprint(result.response)
-      console.log('\n##########################################################\n')
+      console.log('\n########################################################\n')
     }
   } catch (err) {
-    console.log('\n##########################################################\n')
+    console.log('\n########################################################\n')
     console.error('Ops, something went wrong!')
     console.error('               error:', err.message)
     console.error('               stack:', err.stack)
     console.error('.   rancher response:', err.response)
-    console.log('\n##########################################################\n')
+    console.log('\n########################################################\n')
     process.exit(1)
   }
 
