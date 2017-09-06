@@ -76,7 +76,7 @@ const args = {
     required: false,
     description: 'gets the commit ref',
     value: {
-      vars: [ 'DRONE_COMMIT_REF', 'CI_COMMIT_REF' ]
+      vars: [ 'DRONE_COMMIT', 'CI_COMMIT' ]
     }
   },
   logInstructions: {
