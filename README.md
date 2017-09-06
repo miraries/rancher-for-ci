@@ -115,6 +115,11 @@ Remove the version prefix, e.g.: if set to "v", then a version "v1.0.0" will bec
 Adds an environment variable to Rancher containing the release version, eg: **SENTRY_RELEASE**.
 
 
+#### commit_variable (required)
+
+Adds an environment variable to Rancher containing the commit reference, eg: **SENTRY_GIT_COMMIT**.
+
+
 #### log_instructions (optional)
 
 Allow to log instructions sent to rancher (`true` or `false`), which might expose sensitive information.
@@ -153,13 +158,15 @@ docker build -t rancher-for-ci .
 
 ```sh
 docker run -ti \
-    -e PLUGIN_ENDPOINT=https://rancher.domain.com/v1/projects/{ID} \
-    -e PLUGIN_ACCESS_KEY=ReplaceMe! \
-    -e PLUGIN_SECRET_KEY=ReplaceMe! \
+    -e "PLUGIN_ENDPOINT=$RANCHER_URL" \
+    -e "PLUGIN_ACCESS_KEY=$RANCHER_ACCESS_KEY" \
+    -e "PLUGIN_SECRET_KEY=$RANCHER_SECRET_KEY" \
     -e PLUGIN_SERVICE=my-stack/my-service \
     -e PLUGIN_VERSION=v1.0.0 \
     -e PLUGIN_VERSION_PREFIX=v \
     -e PLUGIN_RELEASE_VARIABLE=SENTRY_RELEASE \
+    -e PLUGIN_COMMIT_VARIABLE=SENTRY_GIT_COMMIT \
+    -e DRONE_COMMIT_REF=c0deb10c4 \
     -e PLUGIN_LOG_INSTRUCTIONS=1 \
     rancher-for-ci --dry-run
 ```

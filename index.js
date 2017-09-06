@@ -59,8 +59,8 @@ const buildUpgradeInstructions = async (service, newVersion) => {
   )
 }
 
-const withReleaseEnvVar = async (instruction, variable, release) => {
-  const launchConfig = { environment: { [variable]: release } }
+const withAdditionalEnvVar = async (instruction, variable, value) => {
+  const launchConfig = { environment: { [variable]: value } }
 
   return merge(
     instruction,
@@ -76,6 +76,7 @@ class Rancher {
   constructor (options) {
     this.config = Object.assign({
       dryRun: false,
+      commitVariable: null,
       releaseVariable: null,
       url: process.env.RANCHER_URL,
       accessKey: process.env.RANCHER_ACCESS_KEY,
@@ -92,13 +93,17 @@ class Rancher {
     })
   }
 
-  async upgrade (name, version, release) {
-    const { dryRun, releaseVariable } = this.config
+  async upgrade (name, version, commit) {
+    const { commitVariable, dryRun, releaseVariable } = this.config
     const service = await findServiceByName(this.client, name)
     let upgrade = await buildUpgradeInstructions(service, version)
 
-    if (releaseVariable && release) {
-      upgrade = await withReleaseEnvVar(upgrade, releaseVariable, release)
+    if (commitVariable && commit) {
+      upgrade = await withAdditionalEnvVar(upgrade, commitVariable, commit)
+    }
+
+    if (releaseVariable) {
+      upgrade = await withAdditionalEnvVar(upgrade, releaseVariable, version)
     }
 
     const response = (!dryRun)

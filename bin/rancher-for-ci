@@ -61,12 +61,22 @@ const args = {
       transform: (str) => str.toUpperCase()
     }
   },
-  release: {
-    name: 'release',
+  commitVariable: {
+    name: 'commit_variable',
     required: false,
-    description: 'gets the commit SHA which usually is used as release',
+    description: 'adds an environment variable to Rancher containing the commit reference',
+    usage: 'SENTRY_GIT_COMMIT',
     value: {
-      vars: [ 'DRONE_COMMIT_SHA', 'CI_COMMIT_SHA' ]
+      vars: [ 'PLUGIN_COMMIT_VARIABLE' ],
+      transform: (str) => str.toUpperCase()
+    }
+  },
+  commit: {
+    name: 'commit',
+    required: false,
+    description: 'gets the commit ref',
+    value: {
+      vars: [ 'DRONE_COMMIT_REF', 'CI_COMMIT_REF' ]
     }
   },
   logInstructions: {
@@ -137,14 +147,16 @@ const client = new Rancher({
   dryRun: flags.has('--dry-run'),
   accessKey: args.get('rancherAccessKey'),
   secretKey: args.get('rancherSecretKey'),
+  commitVariable: args.get('commitVariable'),
   releaseVariable: args.get('releaseVariable'),
-  logInstructions: args.get('logInstructions')
+  logInstructions: args.get('logInstructions'),
 })
+
 
 ;(async () => {
   console.log(`Running rancher-for-ci v${pkg.version}`)
 
-  const release = args.get('release')
+  const commit = args.get('commit')
   const service = args.get('service')
   const versionPrefix = args.get('versionPrefix')
   const version = versionPrefix
@@ -154,7 +166,7 @@ const client = new Rancher({
   console.log('Upgrading service', service, 'to version', (versionPrefix ? `[${versionPrefix}]` : '') + version, '...')
 
   try {
-    const result = await client.upgrade(service, version, release)
+    const result = await client.upgrade(service, version, commit)
     const { upgrade: { inServiceStrategy: { launchConfig } } } = result
 
 
@@ -162,7 +174,7 @@ const client = new Rancher({
     console.log(` Upgrade request has been accepted!`)
     console.log('      service:', service)
     console.log('     to image:', launchConfig.imageUuid)
-    console.log('      release:', release)
+    console.log('       commit:', commit)
     console.log('\n########################################################\n')
 
     if (args.get('logInstructions')) {
