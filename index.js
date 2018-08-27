@@ -83,7 +83,7 @@ const checkUpgradeService = async (client, id) => {
       return service.state !== 'upgraded'
     },
     async () => {
-      await sleep(2)
+      await sleep(2000)
       attempts += 2
       if (attempts > upgradeTimeout) {
         throw new Error('A timeout occured while waiting for Rancher to finish the previous upgrade')
