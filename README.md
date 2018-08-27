@@ -16,10 +16,10 @@ Because I needed a plugin that could upgrade only a given service's docker image
 
 ## Using as a node module
 
-Install it (`yarn add rancher-for-ci` or `npm i -s rancher-for-ci`) then use as in the example below:
+Install it (`yarn add @lgatica/rancher-for-ci` or `npm i -s @lgatica/rancher-for-ci`) then use as in the example below:
 
 ```js
-const Rancher = require('rancher-for-ci')
+const Rancher = require('@lgatica/rancher-for-ci')
 
 const client = new Rancher(
   'https://rancher.domain.com/v1/projects/{ID}',
