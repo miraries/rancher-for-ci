@@ -1,9 +1,9 @@
 {
-  "name": "@lgatica/rancher-for-ci",
+  "name": "@eclass/rancher-for-ci",
   "version": "1.3.0",
   "description": "A way to upgrade only the given service's docker image version.",
   "main": "index.js",
-  "repository": "git@github.com:lgaticaq/rancher-for-ci.git",
+  "repository": "git@github.com:eclass/rancher-for-ci.git",
   "author": "Leonardo Gatica <lgatica@protonmail.com> (https://about.me/lgatica)",
   "license": "MIT",
   "files": [
