@@ -20,5 +20,14 @@
     "axios": "^0.16.2",
     "lodash.merge": "^4.6.0",
     "p-whilst": "^1.0.0"
+  },
+  "devDependencies": {
+    "@eclass/semantic-release-npm-github-config": "3.0.0",
+    "@semantic-release/changelog": "3.0.4",
+    "@semantic-release/git": "7.0.16",
+    "semantic-release": "15.13.24"
+  },
+  "release": {
+    "extends": "@eclass/semantic-release-npm-github-config"
   }
 }
