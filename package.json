@@ -15,7 +15,7 @@
     "index.js"
   ],
   "bin": {
-    "rancher-for-ci": "./bin/rancher-for-ci"
+    "rancher-for-ci": "./bin/rancher-for-ci.js"
   },
   "engine": [
     "node >= 7.6.0"
