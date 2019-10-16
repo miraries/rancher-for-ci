@@ -3,6 +3,10 @@
   "version": "1.3.1",
   "description": "A way to upgrade only the given service's docker image version.",
   "main": "index.js",
+  "scripts": {
+    "lint": "eslint --fix .",
+    "format": "prettier-standard 'index.js' '{bin,spec}/**/*.js'"
+  },
   "repository": "git@github.com:eclass/rancher-for-ci.git",
   "author": "Leonardo Gatica <lgatica@protonmail.com> (https://about.me/lgatica)",
   "license": "MIT",
@@ -22,10 +26,52 @@
     "p-whilst": "^1.0.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "8.2.0",
+    "@commitlint/config-conventional": "8.2.0",
+    "@eclass/eslint-config": "1.1.3",
     "@eclass/semantic-release-npm-github-config": "3.0.0",
     "@semantic-release/changelog": "3.0.4",
     "@semantic-release/git": "7.0.16",
+    "eslint": "6.5.1",
+    "eslint-plugin-array-func": "3.1.3",
+    "eslint-plugin-eslint-comments": "3.1.2",
+    "eslint-plugin-import": "2.18.2",
+    "eslint-plugin-jsdoc": "15.11.1",
+    "eslint-plugin-node": "10.0.0",
+    "eslint-plugin-promise": "4.2.1",
+    "eslint-plugin-security": "1.4.0",
+    "eslint-plugin-sonarjs": "0.4.0",
+    "eslint-plugin-standard": "4.0.1",
+    "husky": "3.0.9",
+    "lint-staged": "9.4.2",
+    "prettier-standard": "15.0.1",
     "semantic-release": "15.13.24"
+  },
+  "eslintConfig": {
+    "extends": "@eclass"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "{bin,spec}/**/*.js": [
+      "eslint --fix",
+      "prettier-standard",
+      "git add"
+    ],
+    "index.js": [
+      "eslint --fix",
+      "prettier-standard",
+      "git add"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   },
   "release": {
     "extends": "@eclass/semantic-release-npm-github-config"
