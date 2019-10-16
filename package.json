@@ -21,9 +21,9 @@
     "node >= 7.6.0"
   ],
   "dependencies": {
-    "axios": "^0.16.2",
+    "axios": "^0.19.0",
     "lodash.merge": "^4.6.0",
-    "p-whilst": "^1.0.0"
+    "p-whilst": "^2.1.0"
   },
   "devDependencies": {
     "@commitlint/cli": "8.2.0",
