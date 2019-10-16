@@ -1,26 +1,28 @@
 'use strict'
 
+/* eslint-disable require-jsdoc */
+
 const axios = require('axios')
 const merge = require('lodash.merge')
 const pWhilst = require('p-whilst')
 
-const getStacks = async (client) => {
+const getStacks = async client => {
   return (await client.get('environments/')).data.data
 }
 
-const getServices = async (client) => {
+const getServices = async client => {
   return (await client.get('services/')).data.data
 }
 
-const fetchStackByName = async (stacks, name) => {
-  return stacks.filter(stack => stack.name === name)
-               .pop()
+const fetchStackByName = (stacks, name) => {
+  return stacks.filter(stack => stack.name === name).pop()
 }
 
-const fetchServiceByName = async (services, name, stackId = null) => {
-  return services.filter(s => s.name === name)
-                 .filter(s => !stackId || s.environmentId === stackId)
-                 .pop()
+const fetchServiceByName = (services, name, stackId = null) => {
+  return services
+    .filter(s => s.name === name)
+    .filter(s => !stackId || s.environmentId === stackId)
+    .pop()
 }
 
 const findStackByName = async (client, name) => {
@@ -28,14 +30,17 @@ const findStackByName = async (client, name) => {
   const stack = await fetchStackByName(stacks, name)
 
   if (!stack) {
-    throw new Error (`Unable to locate stack '${stack}'`)
+    throw new Error(`Unable to locate stack '${stack}'`)
   }
 
   return stack
 }
 
 const findServiceByName = async (client, name) => {
-  const [ service, stack ] = name.toLowerCase().split('/').reverse()
+  const [service, stack] = name
+    .toLowerCase()
+    .split('/')
+    .reverse()
   const services = await getServices(client)
 
   const stackId = stack ? (await findStackByName(client, stack)).id : null
@@ -48,37 +53,43 @@ const findServiceByName = async (client, name) => {
   return locatedService
 }
 
-const buildUpgradeInstructions = async (service, newVersion) => {
-  const { launchConfig, launchConfig: { imageUuid } } = service
+const buildUpgradeInstructions = (service, newVersion) => {
+  const {
+    launchConfig,
+    launchConfig: { imageUuid }
+  } = service
 
-  const [ type, repo, ] = imageUuid.split(':')
-  const image = [ type, repo, newVersion ].join(':')
+  const [type, repo] = imageUuid.split(':')
+  const image = [type, repo, newVersion].join(':')
 
   return merge(
     { inServiceStrategy: { launchConfig } },
-    { inServiceStrategy: { launchConfig: { imageUuid: image }, startFirst: true } }
+    {
+      inServiceStrategy: {
+        launchConfig: { imageUuid: image },
+        startFirst: true
+      }
+    }
   )
 }
 
-const withAdditionalEnvVar = async (instruction, variable, value) => {
+const withAdditionalEnvVar = (instruction, variable, value) => {
   const launchConfig = { environment: { [variable]: value } }
 
-  return merge(
-    instruction,
-    { inServiceStrategy: { launchConfig } }
-  )
+  return merge(instruction, { inServiceStrategy: { launchConfig } })
 }
 
 const upgradeService = async (client, id, upgrade) => {
   return (await client.post(`services/${id}/?action=upgrade`, upgrade)).data
 }
 
-const checkUpgradeService = async (client, id) => {
+const checkUpgradeService = (client, id) => {
   let attempts = 0
   let service = {}
   const upgradeTimeout = 5 * 60
-  const sleep = timeout => new Promise(resolve => setTimeout(() => resolve(), timeout))
-  return await pWhilst(
+  const sleep = timeout =>
+    new Promise(resolve => setTimeout(() => resolve(), timeout))
+  return pWhilst(
     () => {
       return service.state !== 'upgraded'
     },
@@ -86,13 +97,17 @@ const checkUpgradeService = async (client, id) => {
       await sleep(2000)
       attempts += 2
       if (attempts > upgradeTimeout) {
-        throw new Error('A timeout occured while waiting for Rancher to finish the previous upgrade')
+        throw new Error(
+          'A timeout occured while waiting for Rancher to finish the previous upgrade'
+        )
       }
       try {
         const response = await client.get(`services/${id}`)
         service = response.data
       } catch (err) {
-        throw new Error('Unable to request the service status from the Rancher API')
+        throw new Error(
+          'Unable to request the service status from the Rancher API'
+        )
       }
     }
   )
@@ -104,14 +119,17 @@ const finishUpgradeService = async (client, id) => {
 
 class Rancher {
   constructor (options) {
-    this.config = Object.assign({
-      dryRun: false,
-      commitVariable: null,
-      releaseVariable: null,
-      url: process.env.RANCHER_URL,
-      accessKey: process.env.RANCHER_ACCESS_KEY,
-      secretKey: process.env.RANCHER_SECRET_KEY
-    }, options)
+    this.config = Object.assign(
+      {
+        dryRun: false,
+        commitVariable: null,
+        releaseVariable: null,
+        url: process.env.RANCHER_URL,
+        accessKey: process.env.RANCHER_ACCESS_KEY,
+        secretKey: process.env.RANCHER_SECRET_KEY
+      },
+      options
+    )
 
     this.client = axios.create({
       auth: {
@@ -119,7 +137,7 @@ class Rancher {
         password: this.config.secretKey
       },
       baseURL: this.config.url,
-      headers: { 'Accept': 'application/json' }
+      headers: { Accept: 'application/json' }
     })
   }
 
@@ -136,20 +154,20 @@ class Rancher {
       upgrade = await withAdditionalEnvVar(upgrade, releaseVariable, version)
     }
 
-    let response = (!dryRun)
+    let response = !dryRun
       ? await upgradeService(this.client, service.id, upgrade)
       : {}
 
-    response = (!dryRun)
-      ? await checkUpgradeService(this.client, service.id, upgrade)
-      : {}
+    response = !dryRun ? await checkUpgradeService(this.client, service.id) : {}
 
-    response = (!dryRun)
-      ? await finishUpgradeService(this.client, service.id, upgrade)
+    response = !dryRun
+      ? await finishUpgradeService(this.client, service.id)
       : {}
 
     return { service, upgrade, response }
   }
 }
+
+/* eslint-enable require-jsdoc */
 
 module.exports = Rancher
