@@ -73,8 +73,5 @@
     "extends": [
       "@commitlint/config-conventional"
     ]
-  },
-  "release": {
-    "extends": "@eclass/semantic-release-npm-github-config"
   }
 }
