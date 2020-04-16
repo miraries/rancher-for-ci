@@ -1,3 +1,17 @@
+# [2.1.0](https://github.com/eclass/rancher-for-ci/compare/v2.0.0...v2.1.0) (2020-04-16)
+
+
+### Bug Fixes
+
+* **deps:** fix vulnerabilities ([f2339e0](https://github.com/eclass/rancher-for-ci/commit/f2339e09c44d375cac13359fe3caf2e01be74b0e))
+* **deps:** update axios to 0.19.2 ([c910b91](https://github.com/eclass/rancher-for-ci/commit/c910b91878b848672cb39a6fcdd4b30559537024))
+
+
+### Features
+
+* **client:** add validate method ([51a9108](https://github.com/eclass/rancher-for-ci/commit/51a91086c153a02d406edcafbca61e6cd7acdda2))
+* **client:** enable startFirst as extra option in service upgrade ([41b82a7](https://github.com/eclass/rancher-for-ci/commit/41b82a72ee4da1be33f1ef09b248dd27a50e9ab2)), closes [#52](https://github.com/eclass/rancher-for-ci/issues/52)
+
 # [2.0.0](https://github.com/eclass/rancher-for-ci/compare/v1.3.1...v2.0.0) (2019-10-17)
 
 
