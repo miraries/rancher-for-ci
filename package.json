@@ -56,17 +56,5 @@
       "pre-commit": "lint-staged",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
-  },
-  "lint-staged": {
-    "{bin,spec}/**/*.js": [
-      "eslint --fix",
-      "prettier-standard",
-      "git add"
-    ],
-    "index.js": [
-      "eslint --fix",
-      "prettier-standard",
-      "git add"
-    ]
   }
 }

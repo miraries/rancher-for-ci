@@ -1,0 +1,10 @@
+{
+  "{bin,spec}/**/*.js": [
+    "eslint --fix",
+    "prettier-standard"
+  ],
+  "index.js": [
+    "eslint --fix",
+    "prettier-standard"
+  ]
+}
