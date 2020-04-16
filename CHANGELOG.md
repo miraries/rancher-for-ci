@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/eclass/rancher-for-ci/compare/v2.1.0...v2.1.1) (2020-04-16)
+
+
+### Bug Fixes
+
+* **npm:** export type denifitions ([4b08493](https://github.com/eclass/rancher-for-ci/commit/4b08493031dd4ba6e5687931901f7eb8b1fd1bef))
+
 # [2.1.0](https://github.com/eclass/rancher-for-ci/compare/v2.0.0...v2.1.0) (2020-04-16)
 
 
