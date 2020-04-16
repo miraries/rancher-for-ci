@@ -68,10 +68,5 @@
       "prettier-standard",
       "git add"
     ]
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
   }
 }
