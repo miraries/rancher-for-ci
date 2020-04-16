@@ -13,6 +13,7 @@
   "license": "MIT",
   "files": [
     "bin",
+    "types.d.ts",
     "index.js"
   ],
   "bin": {
