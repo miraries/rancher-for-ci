@@ -3,6 +3,7 @@
   "version": "2.1.0",
   "description": "A way to upgrade only the given service's docker image version.",
   "main": "index.js",
+  "types": "types.d.ts",
   "scripts": {
     "lint": "eslint --fix .",
     "format": "prettier-standard 'index.js' '{bin,spec}/**/*.js'"
