@@ -6,6 +6,36 @@ const axios = require('axios')
 const merge = require('lodash.merge')
 const pWhilst = require('p-whilst')
 
+/**
+ * @typedef {import('./types').Validate} Validate
+ * @typedef {import('./types').ErrorCode} ErrorCode
+ * @typedef {import('axios').AxiosInstance} AxiosInstance
+ */
+
+/**
+ * @param {AxiosInstance} client -
+ * @returns {Promise<Validate>} -
+ * @example
+ * const { isValid, errorCode } = validate(client)
+ */
+const validate = async client => {
+  try {
+    await client.get('/')
+    return { isValid: true, errorCode: null }
+  } catch (err) {
+    /** @type {ErrorCode} */
+    let errorCode = 'UNKNOWN'
+    if (err.response) {
+      if (err.response.status === 404) {
+        errorCode = 'NOT_FOUND_ENVIRONMENT'
+      } else if (err.response.status === 401) {
+        errorCode = 'UNAUTHORIZED'
+      }
+    }
+    return { isValid: false, errorCode }
+  }
+}
+
 const getStacks = async client => {
   return (await client.get('environments/')).data.data
 }
@@ -131,6 +161,7 @@ class Rancher {
       options
     )
 
+    // @ts-ignore
     this.client = axios.create({
       auth: {
         username: this.config.accessKey,
@@ -139,6 +170,16 @@ class Rancher {
       baseURL: this.config.url,
       headers: { Accept: 'application/json' }
     })
+  }
+
+  /**
+   * @returns {Promise<Validate>} -
+   * @example
+   * const { isValid, errorCode } = client.validate()
+   */
+  async validate () {
+    const { isValid, errorCode } = await validate(this.client)
+    return { isValid, errorCode }
   }
 
   async upgrade (name, version, commit) {

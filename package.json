@@ -32,6 +32,7 @@
     "@eclass/semantic-release-npm-github-config": "3.0.0",
     "@semantic-release/changelog": "5.0.1",
     "@semantic-release/git": "9.0.0",
+    "@types/axios": "0.14.0",
     "eslint": "6.8.0",
     "eslint-plugin-array-func": "3.1.5",
     "eslint-plugin-eslint-comments": "3.1.2",
