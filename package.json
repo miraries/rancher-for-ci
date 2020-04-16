@@ -76,10 +76,5 @@
   },
   "release": {
     "extends": "@eclass/semantic-release-npm-github-config"
-  },
-  "renovate": {
-    "extends": [
-      "@eclass:js-lib"
-    ]
   }
 }
