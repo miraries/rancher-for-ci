@@ -1,3 +1,10 @@
+## [2.1.2](https://github.com/eclass/rancher-for-ci/compare/v2.1.1...v2.1.2) (2020-04-16)
+
+
+### Bug Fixes
+
+* **npm:** include types.d.ts in files ([eafcaee](https://github.com/eclass/rancher-for-ci/commit/eafcaee8e241ff4f1b5f3ec3b158d2ebe4f6fb6e))
+
 ## [2.1.1](https://github.com/eclass/rancher-for-ci/compare/v2.1.0...v2.1.1) (2020-04-16)
 
 
