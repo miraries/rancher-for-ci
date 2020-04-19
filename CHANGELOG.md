@@ -1,3 +1,10 @@
+## [2.1.3](https://github.com/eclass/rancher-for-ci/compare/v2.1.2...v2.1.3) (2020-04-19)
+
+
+### Bug Fixes
+
+* **types:** fix export all type definitions ([54d266e](https://github.com/eclass/rancher-for-ci/commit/54d266ead39fcacd8683e2e3da8c44627f7df669))
+
 ## [2.1.2](https://github.com/eclass/rancher-for-ci/compare/v2.1.1...v2.1.2) (2020-04-16)
 
 
