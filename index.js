@@ -5,13 +5,13 @@ const merge = require('lodash.merge')
 const pWhilst = require('p-whilst')
 
 /**
- * @typedef {import('./types').Validate} Validate
- * @typedef {import('./types').ErrorCode} ErrorCode
- * @typedef {import('./types').Service} Service
- * @typedef {import('./types').Stack} Stack
- * @typedef {import('./types').ServiceUpgrade} ServiceUpgrade
- * @typedef {import('./types').Upgrade} Upgrade
- * @typedef {import('./types').Options} Options
+ * @typedef {import('.').Validate} Validate
+ * @typedef {import('.').ErrorCode} ErrorCode
+ * @typedef {import('.').Service} Service
+ * @typedef {import('.').Stack} Stack
+ * @typedef {import('.').ServiceUpgrade} ServiceUpgrade
+ * @typedef {import('.').Upgrade} Upgrade
+ * @typedef {import('.').Options} Options
  * @typedef {import('axios').AxiosInstance} AxiosInstance
  */
 
