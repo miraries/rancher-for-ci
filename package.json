@@ -23,7 +23,7 @@
     "node >= 10"
   ],
   "dependencies": {
-    "axios": "^0.20.0",
+    "axios": "^0.21.0",
     "lodash.merge": "^4.6.0",
     "p-whilst": "^2.1.0"
   },
