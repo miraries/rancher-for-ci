@@ -1,3 +1,10 @@
+## [2.1.6](https://github.com/eclass/rancher-for-ci/compare/v2.1.5...v2.1.6) (2021-01-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency axios to v0.21.1 [security] ([1e9857b](https://github.com/eclass/rancher-for-ci/commit/1e9857b2821042eb6da19d44bc72d39fcbb02ced))
+
 ## [2.1.5](https://github.com/eclass/rancher-for-ci/compare/v2.1.4...v2.1.5) (2020-10-23)
 
 
