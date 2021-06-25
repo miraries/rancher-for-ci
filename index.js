@@ -193,8 +193,8 @@ const checkUpgradeService = (client, id) => {
   let service = {}
   const upgradeTimeout = 5 * 60
   // eslint-disable-next-line require-jsdoc
-  const sleep = timeout =>
-    new Promise(resolve => setTimeout(() => resolve(), timeout))
+  const sleep = ms => new Promise(r => setTimeout(r, ms))
+
   return pWhilst(
     () => {
       return service.state !== 'upgraded'
@@ -296,15 +296,11 @@ class Rancher {
       upgrade = withAdditionalEnvVar(upgrade, releaseVariable, version)
     }
 
-    let response = !dryRun
-      ? await upgradeService(this.client, service.id, upgrade)
-      : {}
+    let response = !dryRun ? await upgradeService(this.client, service.id, upgrade) : {}
 
     response = !dryRun ? await checkUpgradeService(this.client, service.id) : {}
 
-    response = !dryRun
-      ? await finishUpgradeService(this.client, service.id)
-      : {}
+    response = !dryRun ? await finishUpgradeService(this.client, service.id) : {}
 
     return { service, upgrade, response }
   }

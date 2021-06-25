@@ -94,6 +94,14 @@ const args = {
       vars: ['DRONE_COMMIT', 'CI_COMMIT']
     }
   },
+  startFirst: {
+    name: 'start_first',
+    required: false,
+    description: 'use "start before stopping" during upgrade',
+    value: {
+      vars: ['START_FIRST']
+    }
+  },
   logInstructions: {
     name: 'log_instructions',
     required: false,
@@ -164,13 +172,13 @@ const client = new Rancher({
   secretKey: args.get('rancherSecretKey'),
   commitVariable: args.get('commitVariable'),
   releaseVariable: args.get('releaseVariable'),
-  logInstructions: args.get('logInstructions')
 })
 
 ;(async () => {
   console.log(`Running rancher-for-ci v${pkg.version}`)
 
   const commit = args.get('commit')
+  const startFirst = args.get('startFirst') ?? true;
   const service = args.get('service')
   const versionPrefix = args.get('versionPrefix')
   const version = versionPrefix
@@ -186,7 +194,7 @@ const client = new Rancher({
   )
 
   try {
-    const result = await client.upgrade(service, version, commit)
+    const result = await client.upgrade(service, version, commit, startFirst)
     const {
       upgrade: {
         inServiceStrategy: { launchConfig }
