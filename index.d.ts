@@ -199,8 +199,8 @@ declare namespace Rancher {
     url: string
     accessKey: string
     secretKey: string
-    dryRun?: boolean = false
-    commitVariable?: string = null
-    releaseVariable?: string = null
+    dryRun?: boolean
+    commitVariable?: string
+    releaseVariable?: string
   }
 }

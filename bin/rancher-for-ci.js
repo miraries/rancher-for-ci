@@ -4,7 +4,7 @@
 /* eslint-disable no-console, require-jsdoc, security/detect-object-injection, security/detect-non-literal-regexp */
 
 const Rancher = require('../index')
-const pkg = require('../package')
+const pkg = require('../package.json')
 
 const HEADER = '\n########################################################\n'
 

@@ -1,3 +1,0 @@
-{
-  "extends": "@eclass/semantic-release-npm-github-config"
-}

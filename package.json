@@ -1,5 +1,5 @@
 {
-  "name": "@eclass/rancher-for-ci",
+  "name": "@miraries/rancher-for-ci",
   "version": "2.1.6",
   "description": "A way to upgrade only the given service's docker image version.",
   "main": "index.js",
@@ -8,19 +8,19 @@
     "lint": "eslint --fix .",
     "format": "prettier-standard 'index.js' '{bin,spec}/**/*.js'"
   },
-  "repository": "git@github.com:eclass/rancher-for-ci.git",
-  "author": "Leonardo Gatica <lgatica@protonmail.com> (https://about.me/lgatica)",
+  "repository": "git@github.com:miraries/rancher-for-ci.git",
+  "author": "Leonardo Gatica, Ivan Kotlaja",
   "license": "MIT",
   "files": [
     "bin",
-    "types.d.ts",
+    "index.d.ts",
     "index.js"
   ],
   "bin": {
     "rancher-for-ci": "./bin/rancher-for-ci.js"
   },
   "engine": [
-    "node >= 10"
+    "node >= 12"
   ],
   "dependencies": {
     "axios": "^0.21.0",
@@ -28,27 +28,9 @@
     "p-whilst": "^2.1.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "8.3.5",
-    "@commitlint/config-conventional": "8.3.4",
-    "@eclass/eslint-config": "2.0.1",
-    "@eclass/semantic-release-npm-github-config": "3.0.1",
-    "@semantic-release/changelog": "5.0.1",
-    "@semantic-release/git": "9.0.0",
     "@types/axios": "0.14.0",
     "@types/lodash.merge": "4.6.6",
     "eslint": "7.29.0",
-    "eslint-plugin-array-func": "3.1.7",
-    "eslint-plugin-eslint-comments": "3.2.0",
-    "eslint-plugin-import": "2.23.4",
-    "eslint-plugin-jsdoc": "30.7.13",
-    "eslint-plugin-node": "11.1.0",
-    "eslint-plugin-promise": "4.3.1",
-    "eslint-plugin-security": "1.4.0",
-    "eslint-plugin-sonarjs": "0.7.0",
-    "eslint-plugin-standard": "4.1.0",
-    "husky": "4.3.8",
-    "lint-staged": "10.5.4",
-    "prettier-standard": "16.4.1",
-    "semantic-release": "17.4.4"
+    "prettier-standard": "16.4.1"
   }
 }
