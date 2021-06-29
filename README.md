@@ -1,5 +1,12 @@
 # Rancher for CI
 
+**This is a fork**
+
+**Documentation below is outdated**
+
+---
+
+
 Because I needed a plugin that could upgrade only a given service's docker image version.
 
 **Attention**: This pluging supports only Rancher Environment API v1.
