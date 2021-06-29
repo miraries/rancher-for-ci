@@ -11,6 +11,9 @@ const require = createRequire(import.meta.url)
 const pkg = require('../package.json')
 
 const argv = yargs(hideBin(process.argv))
+  .env('RANCHER')
+  .strict()
+  .help()
   .option('url', {
     describe: 'Rancher url containing environment id',
     demandOption: true
@@ -63,8 +66,6 @@ const argv = yargs(hideBin(process.argv))
 
     return true
   })
-  .strict()
-  .help()
   .argv
 
 const HEADER = '\n########################################################\n'

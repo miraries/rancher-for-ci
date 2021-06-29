@@ -243,9 +243,9 @@ class Rancher {
         dryRun: false,
         commitVariable: null,
         releaseVariable: null,
-        url: process.env.RANCHER_URL,
-        accessKey: process.env.RANCHER_ACCESS_KEY,
-        secretKey: process.env.RANCHER_SECRET_KEY
+        url: null,
+        accessKey: null,
+        secretKey: null
       },
       options
     )
