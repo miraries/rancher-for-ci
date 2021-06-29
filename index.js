@@ -193,7 +193,7 @@ const checkUpgradeService = (client, id) => {
   let service = {}
   const upgradeTimeout = 5 * 60
   // eslint-disable-next-line require-jsdoc
-  const sleep = ms => new Promise(r => setTimeout(r, ms))
+  const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
   return pWhilst(
     () => {
@@ -234,7 +234,6 @@ const finishUpgradeService = async (client, id) => {
  * @class
  */
 class Rancher {
-  // eslint-disable-next-line jsdoc/require-example
   /**
    * @param {Options} options -
    */
