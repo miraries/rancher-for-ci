@@ -1,9 +1,16 @@
 #!/usr/bin/env node
 'use strict'
 
-const yargs = require('yargs/yargs')
+import yargs from 'yargs'
+import { hideBin } from 'yargs/helpers'
+import path from 'path'
+import Rancher from '../index.js'
 
-const argv = yargs(yargs.hideBin(process.argv))
+import { createRequire } from 'module'
+const require = createRequire(import.meta.url)
+const pkg = require('../package.json')
+
+const argv = yargs(hideBin(process.argv))
   .option('url', {
     describe: 'Rancher url containing environment id',
     demandOption: true
@@ -59,10 +66,6 @@ const argv = yargs(yargs.hideBin(process.argv))
   .strict()
   .help()
   .argv
-
-const path = require('path')
-const Rancher = require('../index')
-const pkg = require('../package.json')
 
 const HEADER = '\n########################################################\n'
 

@@ -1,8 +1,8 @@
 'use strict'
 
-const axios = require('axios')
-const merge = require('lodash.merge')
-const pWhilst = require('p-whilst')
+import axios from 'axios'
+import merge from 'lodash.merge'
+import pWhilst from 'p-whilst'
 
 /**
  * @typedef {import('.').Validate} Validate
@@ -192,7 +192,6 @@ const checkUpgradeService = (client, id) => {
   let attempts = 0
   let service = {}
   const upgradeTimeout = 5 * 60
-  // eslint-disable-next-line require-jsdoc
   const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
   return pWhilst(
@@ -305,4 +304,4 @@ class Rancher {
   }
 }
 
-module.exports = Rancher
+export default Rancher
