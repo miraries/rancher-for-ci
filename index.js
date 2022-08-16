@@ -56,7 +56,7 @@ const getStacks = async client => {
  * const services = getServices(client)
  */
 const getServices = async client => {
-  return (await client.get('services/')).data.data
+  return (await client.get('services/?limit=1000')).data.data
 }
 
 /**
