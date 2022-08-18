@@ -13,7 +13,8 @@
   "license": "MIT",
   "files": [
     "bin",
-    "index.js"
+    "rancher",
+    "cloudflare"
   ],
   "bin": {
     "rancher-for-ci": "./bin/rancher-for-ci.js"
