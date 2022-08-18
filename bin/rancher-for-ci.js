@@ -4,7 +4,8 @@
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import path from 'path'
-import Rancher from '../index.js'
+import Rancher from '../rancher/index.js'
+import clearCfCache from '../cloudflare/index.js'
 
 import { createRequire } from 'module'
 const require = createRequire(import.meta.url)
@@ -54,6 +55,14 @@ const argv = yargs(hideBin(process.argv))
     describe: 'Use "start before stopping" during Rancher upgrade',
     type: 'boolean',
     default: true
+  })
+  .option('cfZoneId', {
+    describe: 'Cloudflare zone id to clear cache for',
+    type: 'string',
+  })
+  .option('cfApiKey', {
+    describe: 'Cloudflare api key',
+    type: 'string',
   })
   .option('verbose', {
     describe: 'Log upgrade instructions sent to rancher, might expose sensitive information',
@@ -139,6 +148,22 @@ const client = new Rancher({
     console.log(HEADER)
     process.exit(1)
   }
+
+  if (argv.cfZoneId && argv.cfApiKey) {
+    try {
+      await clearCfCache({
+        apiKey: argv.cfApiKey,
+        zoneId: argv.cfZoneId,
+      });
+
+      console.log('Cleared CF cache for zone id', argv.cfZoneId);
+    } catch (err) {
+      console.log('Error clearing CF cache', err);
+    }
+  } else {
+    console.log('No CF zone or api key provided, no cache to clear');
+  }
+  console.log(HEADER)
 
   console.log('Done!')
   process.exit(0)

@@ -3,7 +3,6 @@
   "version": "3.4.0",
   "description": "A way to upgrade only the given service's docker image version.",
   "main": "index.js",
-  "types": "types.d.ts",
   "type": "module",
   "scripts": {
     "lint": "eslint --fix .",
@@ -14,7 +13,6 @@
   "license": "MIT",
   "files": [
     "bin",
-    "index.d.ts",
     "index.js"
   ],
   "bin": {
